@@ -6,7 +6,7 @@ export const getReceptionists = async () => {
 };
 
 export const createReceptionist = async (userData) => {
-  const response = await API.post("/admin/receptionists", userData);
+  const response = await API.post("/admin/users", userData);
   return response.data.data;
 };
 

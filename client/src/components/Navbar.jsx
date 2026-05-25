@@ -41,10 +41,9 @@ const Navbar = () => {
 
           {/* ── Desktop Nav ── */}
           <div className="hidden md:flex items-center gap-1">
-            <Link to="/" className={linkClass("/")}>Home</Link>
-            <Link to="/hotels" className={linkClass("/hotels")}>Hotels</Link>
+            <Link to="/" className={linkClass("/")}>Hotels</Link>
 
-            {user && (
+            {user?.role === "CUSTOMER" && (
               <Link to="/booking-history" className={linkClass("/booking-history")}>
                 My Bookings
               </Link>
@@ -56,7 +55,7 @@ const Navbar = () => {
               </Link>
             )}
 
-            {(user?.role === "ADMIN" || user?.role === "RECEPTIONIST") && (
+            {user?.role === "RECEPTIONIST" && (
               <Link to="/reception" className={linkClass("/reception")}>
                 Reception
               </Link>
@@ -117,10 +116,9 @@ const Navbar = () => {
       {/* ── Mobile Menu ── */}
       {mobileOpen && (
         <div className="md:hidden border-t border-white/10 px-4 py-4 space-y-1 fade-in">
-          <Link to="/" className={linkClass("/")} onClick={() => setMobileOpen(false)}>Home</Link>
-          <Link to="/hotels" className={linkClass("/hotels")} onClick={() => setMobileOpen(false)}>Hotels</Link>
+          <Link to="/" className={linkClass("/")} onClick={() => setMobileOpen(false)}>Hotels</Link>
 
-          {user && (
+          {user?.role === "CUSTOMER" && (
             <Link to="/booking-history" className={linkClass("/booking-history")} onClick={() => setMobileOpen(false)}>
               My Bookings
             </Link>
@@ -130,7 +128,7 @@ const Navbar = () => {
             <Link to="/admin" className={linkClass("/admin")} onClick={() => setMobileOpen(false)}>Admin</Link>
           )}
 
-          {(user?.role === "ADMIN" || user?.role === "RECEPTIONIST") && (
+          {user?.role === "RECEPTIONIST" && (
             <Link to="/reception" className={linkClass("/reception")} onClick={() => setMobileOpen(false)}>Reception</Link>
           )}
 

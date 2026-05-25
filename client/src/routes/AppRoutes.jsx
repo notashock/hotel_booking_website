@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 // ── Public Pages ──
-import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Hotels from "../pages/Hotels";
@@ -24,7 +23,7 @@ const AppRoutes = () => {
       <Navbar />
       <Routes>
         {/* ── Public Routes ── */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Hotels />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/hotels" element={<Hotels />} />
@@ -34,7 +33,7 @@ const AppRoutes = () => {
         <Route
           path="/booking-history"
           element={
-            <ProtectedRoute allowedRoles={["CUSTOMER", "ADMIN", "RECEPTIONIST"]}>
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
               <BookingHistory />
             </ProtectedRoute>
           }
@@ -54,7 +53,7 @@ const AppRoutes = () => {
         <Route
           path="/reception"
           element={
-            <ProtectedRoute allowedRoles={["RECEPTIONIST", "ADMIN"]}>
+            <ProtectedRoute allowedRoles={["RECEPTIONIST"]}>
               <ReceptionPortal />
             </ProtectedRoute>
           }

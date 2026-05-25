@@ -38,8 +38,13 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+                        .requestMatchers("/api/admin/bookings/**").hasAnyAuthority("ADMIN", "RECEPTIONIST")
+                        .requestMatchers("/api/admin/rooms/*/availability").hasAnyAuthority("ADMIN", "RECEPTIONIST")
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/reception/**").hasAnyAuthority("RECEPTIONIST", "ADMIN")
+                        .requestMatchers("/api/reception/**").hasAuthority("RECEPTIONIST")
+                        // Allow anyone to view and search hotels
+                        .requestMatchers("/api/customer/hotels").permitAll()
+                        .requestMatchers("/api/customer/hotels/search").permitAll()
                         // Customer endpoints (hotels, bookings, promos) are accessible to ALL authenticated users
                         .requestMatchers("/api/customer/**").authenticated()
                         .anyRequest().authenticated()

@@ -11,7 +11,7 @@ const getStatusBadge = (status) => {
   return `badge ${map[status] || "badge-pending"}`;
 };
 
-const BookingList = ({ bookings, onCancel, onAssignRoom }) => {
+const BookingList = ({ bookings, onCancel, onAssignRoom, onEditDates, onCheckIn, onCheckOut }) => {
   if (!bookings || bookings.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-slate-400">
@@ -85,6 +85,31 @@ const BookingList = ({ bookings, onCancel, onAssignRoom }) => {
                       >
                         <FiXCircle size={13} /> Cancel
                       </button>
+                      {(booking.status === "CONFIRMED" || booking.status === "PENDING") && (
+                        <button
+                          onClick={() => onCheckIn(booking.id)}
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-smooth"
+                          title="Check In"
+                        >
+                          Check In
+                        </button>
+                      )}
+                      {booking.status === "CHECKED_IN" && (
+                        <button
+                          onClick={() => onCheckOut(booking.id)}
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition-smooth"
+                          title="Check Out"
+                        >
+                          Check Out
+                        </button>
+                      )}
+                      <button
+                        onClick={() => onEditDates(booking)}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-smooth"
+                        title="Edit Dates"
+                      >
+                        <FiCalendar size={13} /> Edit
+                      </button>
                       <button
                         onClick={() => onAssignRoom(booking)}
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-smooth"
@@ -151,6 +176,28 @@ const BookingList = ({ bookings, onCancel, onAssignRoom }) => {
                   className="flex items-center gap-1.5 flex-1 justify-center px-3 py-2 rounded-xl text-sm font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-smooth"
                 >
                   <FiXCircle size={14} /> Cancel
+                </button>
+                {(booking.status === "CONFIRMED" || booking.status === "PENDING") && (
+                  <button
+                    onClick={() => onCheckIn(booking.id)}
+                    className="flex items-center gap-1.5 flex-1 justify-center px-3 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-smooth"
+                  >
+                    Check In
+                  </button>
+                )}
+                {booking.status === "CHECKED_IN" && (
+                  <button
+                    onClick={() => onCheckOut(booking.id)}
+                    className="flex items-center gap-1.5 flex-1 justify-center px-3 py-2 rounded-xl text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 transition-smooth"
+                  >
+                    Check Out
+                  </button>
+                )}
+                <button
+                  onClick={() => onEditDates(booking)}
+                  className="flex items-center gap-1.5 flex-1 justify-center px-3 py-2 rounded-xl text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-smooth"
+                >
+                  <FiCalendar size={14} /> Edit Dates
                 </button>
                 <button
                   onClick={() => onAssignRoom(booking)}

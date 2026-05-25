@@ -12,6 +12,7 @@ import ReservationSearch from "../components/ReservationSearch";
 import BookingList from "../components/BookingList";
 import OccupancyCard from "../components/OccupancyCard";
 import AssignRoomModal from "../components/AssignRoomModal";
+import EditDatesModal from "../components/EditDatesModal";
 
 const tabs = [
   { key: "arrivals", label: "Today's Arrivals", icon: FiLogIn },
@@ -28,6 +29,7 @@ const ReceptionPortal = () => {
   const [occupancy, setOccupancy] = useState(0);
   const [loading, setLoading] = useState(false);
   const [assignBooking, setAssignBooking] = useState(null);
+  const [editDatesBooking, setEditDatesBooking] = useState(null);
 
   const fetchTabData = useCallback(async (tab) => {
     setLoading(true);
@@ -100,6 +102,10 @@ const ReceptionPortal = () => {
 
   const handleAssignRoom = (booking) => {
     setAssignBooking(booking);
+  };
+
+  const handleEditDates = (booking) => {
+    setEditDatesBooking(booking);
   };
 
   const refreshCurrentTab = () => fetchTabData(activeTab);
@@ -234,6 +240,9 @@ const ReceptionPortal = () => {
             bookings={bookings}
             onCancel={handleCancel}
             onAssignRoom={handleAssignRoom}
+            onEditDates={handleEditDates}
+            onCheckIn={handleCheckIn}
+            onCheckOut={handleCheckOut}
           />
         );
 
@@ -324,6 +333,15 @@ const ReceptionPortal = () => {
         <AssignRoomModal
           booking={assignBooking}
           onClose={() => setAssignBooking(null)}
+          refreshBookings={refreshCurrentTab}
+        />
+      )}
+
+      {/* ── Edit Dates Modal ── */}
+      {editDatesBooking && (
+        <EditDatesModal
+          booking={editDatesBooking}
+          onClose={() => setEditDatesBooking(null)}
           refreshBookings={refreshCurrentTab}
         />
       )}

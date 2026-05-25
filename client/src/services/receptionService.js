@@ -34,3 +34,10 @@ export const getDailyDepartures = async () => {
   const response = await API.get("/reception/departures");
   return response.data.data;
 };
+
+export const updateBookingDates = async (bookingId, checkInDate, checkOutDate) => {
+  const response = await API.put(
+    `/reception/${bookingId}/dates?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`
+  );
+  return response.data.data;
+};

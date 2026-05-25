@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto checkIn(Long bookingId, String role) {
-        validateReceptionist(role);
+        validateReceptionistOrAdmin(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -65,7 +66,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto checkOut(Long bookingId, String role) {
-        validateReceptionist(role);
+        validateReceptionistOrAdmin(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -113,7 +114,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto assignRoomToBooking(Long bookingId, Long newRoomId, String role) {
-        validateReceptionist(role);
+        validateReceptionistOrAdmin(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -141,5 +142,32 @@ public class ReceptionService {
         if (role == null || (!role.equalsIgnoreCase("RECEPTIONIST") && !role.equalsIgnoreCase("ADMIN"))) {
             throw new UnauthorizedAccessException("Unauthorized. Only RECEPTIONIST or ADMIN accounts can perform this action.");
         }
+    }
+
+    @Transactional
+    public BookingResponseDto updateBookingDates(Long bookingId, LocalDate newCheckIn, LocalDate newCheckOut, String role) {
+        validateReceptionistOrAdmin(role);
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
+
+        if (newCheckIn == null || newCheckOut == null || !newCheckIn.isBefore(newCheckOut)) {
+            throw new InvalidDateRangeException("Check-in date must be strictly before check-out date.");
+        }
+
+        booking.setCheckInDate(newCheckIn);
+        booking.setCheckOutDate(newCheckOut);
+
+        // Recalculate price based on new dates (drops promo)
+        long days = ChronoUnit.DAYS.between(newCheckIn, newCheckOut);
+        if (days <= 0) days = 1;
+
+        Room room = roomRepository.findById(booking.getRoomId()).orElse(null);
+        if (room != null) {
+            booking.setTotalAmount(days * room.getPrice());
+        }
+
+        Booking saved = bookingRepository.save(booking);
+        return bookingService.mapToResponseDto(saved);
     }
 }

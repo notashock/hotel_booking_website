@@ -1,10 +1,11 @@
 package com.hotel_booking.server.controllers;
 
 import com.hotel_booking.server.dtos.ApiResponse;
-import com.hotel_booking.server.models.entities.Booking;
+import com.hotel_booking.server.dtos.AuthRequestDto;
+import com.hotel_booking.server.dtos.BookingResponseDto;
 import com.hotel_booking.server.models.entities.User;
 import com.hotel_booking.server.models.enums.Role;
-import com.hotel_booking.server.dtos.AuthRequestDto;
+import com.hotel_booking.server.services.BookingService;
 import com.hotel_booking.server.repositories.BookingRepository;
 import com.hotel_booking.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin") // Fully secured by SecurityConfig
@@ -24,11 +26,14 @@ public class AdminController {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BookingService bookingService;
 
     @GetMapping("/bookings")
-    public ResponseEntity<ApiResponse<List<Booking>>> overseeAllBookings() {
+    public ResponseEntity<ApiResponse<List<BookingResponseDto>>> overseeAllBookings() {
         // No manual header validation needed. Spring Security guards this endpoint.
-        List<Booking> bookings = bookingRepository.findAll();
+        List<BookingResponseDto> bookings = bookingRepository.findAll().stream()
+                .map(bookingService::mapToResponseDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("All bookings retrieved successfully for administration overview", bookings));
     }
 

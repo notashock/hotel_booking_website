@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiMapPin, FiArrowLeft, FiCheck, FiX } from 'react-icons/fi';
-import { getHotelRooms, getAllHotels } from '../services/hotelService';
+import { getHotelRooms, getAllHotels, toggleRoomAvailability } from '../services/hotelService';
 import BookingForm from '../components/BookingForm';
+import { useAuth } from '../context/AuthContext';
 
 const HotelDetails = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [hotel, setHotel] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +35,18 @@ const HotelDetails = () => {
 
   const toggleBookingForm = (roomId) => {
     setExpandedRoom(expandedRoom === roomId ? null : roomId);
+  };
+
+  const handleToggleAvailability = async (roomId, currentStatus) => {
+    try {
+      await toggleRoomAvailability(roomId, !currentStatus);
+      // Refresh rooms locally
+      setRooms((prev) =>
+        prev.map((r) => (r.id === roomId ? { ...r, isAvailable: !currentStatus } : r))
+      );
+    } catch (err) {
+      console.error("Failed to toggle availability", err);
+    }
   };
 
   if (loading) {
@@ -136,7 +150,7 @@ const HotelDetails = () => {
                     </div>
                   )}
 
-                  {room.isAvailable && (
+                  {room.isAvailable && (!user || user.role === 'CUSTOMER') && (
                     <button
                       onClick={() => toggleBookingForm(room.id)}
                       className={`w-full font-semibold py-2.5 rounded-xl transition-smooth text-sm ${
@@ -146,6 +160,19 @@ const HotelDetails = () => {
                       }`}
                     >
                       {expandedRoom === room.id ? 'Hide Booking Form' : 'Book This Room'}
+                    </button>
+                  )}
+
+                  {(user?.role === 'ADMIN' || user?.role === 'RECEPTIONIST') && (
+                    <button
+                      onClick={() => handleToggleAvailability(room.id, room.isAvailable)}
+                      className={`w-full font-semibold py-2.5 rounded-xl transition-smooth text-sm mt-3 ${
+                        room.isAvailable
+                          ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
+                          : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                      }`}
+                    >
+                      {room.isAvailable ? 'Mark as Unavailable' : 'Mark as Available'}
                     </button>
                   )}
                 </div>

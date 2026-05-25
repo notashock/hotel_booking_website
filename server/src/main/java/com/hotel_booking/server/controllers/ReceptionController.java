@@ -75,4 +75,13 @@ public class ReceptionController {
         BookingResponseDto response = receptionService.assignRoomToBooking(bookingId, newRoomId, getAuthenticatedRole());
         return ResponseEntity.ok(ApiResponse.success("Physical room assigned to booking successfully", response));
     }
+
+    @PutMapping("/{bookingId}/dates")
+    public ResponseEntity<ApiResponse<BookingResponseDto>> updateBookingDates(
+            @PathVariable Long bookingId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+        BookingResponseDto response = receptionService.updateBookingDates(bookingId, checkInDate, checkOutDate, getAuthenticatedRole());
+        return ResponseEntity.ok(ApiResponse.success("Booking dates updated successfully", response));
+    }
 }

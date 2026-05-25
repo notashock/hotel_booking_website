@@ -10,7 +10,7 @@ const BookingForm = ({ roomId, price }) => {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [promoData, setPromoData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [promoLoading, setPromoLoading] = useState(false);
   const [error, setError] = useState('');
@@ -24,7 +24,12 @@ const BookingForm = ({ roomId, price }) => {
   };
 
   const nights = calculateNights();
-  const totalPrice = Math.max(0, price * nights - discount);
+  const basePrice = price * nights;
+  let currentDiscount = 0;
+  if (promoData) {
+    currentDiscount = promoData.isPercentage ? basePrice * promoData.value : promoData.value;
+  }
+  const totalPrice = Math.max(0, basePrice - currentDiscount);
 
   const applyPromoCode = async () => {
     if (!promoCode.trim()) return;
@@ -32,10 +37,11 @@ const BookingForm = ({ roomId, price }) => {
     setError('');
     try {
       const promo = await validatePromoCode(promoCode);
-      setDiscount(promo.discount || promo.discountAmount || 0);
+      const val = typeof promo === 'number' ? promo : (promo?.discount || promo?.discountAmount || 0);
+      setPromoData({ value: val, isPercentage: val > 0 && val <= 1 });
     } catch (err) {
       setError(err.message || 'Invalid promo code.');
-      setDiscount(0);
+      setPromoData(null);
     } finally {
       setPromoLoading(false);
     }
@@ -61,7 +67,7 @@ const BookingForm = ({ roomId, price }) => {
       setCheckInDate('');
       setCheckOutDate('');
       setPromoCode('');
-      setDiscount(0);
+      setPromoData(null);
     } catch (err) {
       setError(err.message || 'Booking failed. Please try again.');
     } finally {
@@ -80,6 +86,15 @@ const BookingForm = ({ roomId, price }) => {
         >
           Sign In
         </Link>
+      </div>
+    );
+  }
+
+  // Not a customer
+  if (user.role !== 'CUSTOMER') {
+    return (
+      <div className="text-center py-4 bg-slate-100 rounded-xl border border-slate-200">
+        <p className="text-slate-600 font-medium">Only Customers can create bookings directly.</p>
       </div>
     );
   }
@@ -159,12 +174,12 @@ const BookingForm = ({ roomId, price }) => {
         <div className="bg-white rounded-lg p-3 border border-slate-200 text-sm space-y-1.5">
           <div className="flex justify-between text-slate-600">
             <span>{nights} night{nights > 1 ? 's' : ''} × ₹{price?.toLocaleString('en-IN')}</span>
-            <span>₹{(price * nights).toLocaleString('en-IN')}</span>
+            <span>₹{basePrice.toLocaleString('en-IN')}</span>
           </div>
-          {discount > 0 && (
+          {currentDiscount > 0 && (
             <div className="flex justify-between text-green-600 font-medium">
               <span>Promo Discount</span>
-              <span>-₹{discount.toLocaleString('en-IN')}</span>
+              <span>-₹{currentDiscount.toLocaleString('en-IN')}</span>
             </div>
           )}
           <div className="flex justify-between text-slate-900 font-bold pt-1.5 border-t border-slate-200">

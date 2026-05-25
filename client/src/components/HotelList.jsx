@@ -1,7 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiMapPin, FiArrowRight, FiSearch } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 
 const HotelList = ({ hotels }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleViewRooms = (e) => {
+    if (!user) {
+      e.preventDefault();
+      navigate('/login');
+    }
+  };
+
   if (!hotels || hotels.length === 0) {
     return (
       <div className="text-center py-20 fade-in">
@@ -53,6 +64,7 @@ const HotelList = ({ hotels }) => {
 
             <Link
               to={`/hotels/${hotel.id}`}
+              onClick={handleViewRooms}
               className="inline-flex items-center gap-2 w-full justify-center gradient-bg-primary text-white font-semibold py-2.5 rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-smooth text-sm"
             >
               View Rooms
