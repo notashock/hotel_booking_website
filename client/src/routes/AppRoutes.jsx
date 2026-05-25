@@ -14,7 +14,8 @@ import HotelDetails
 from "../pages/HotelDetails";
 import BookingHistory
 from "../pages/BookingHistory";
-
+import DailyDepartures
+from "../pages/DailyDepartures";
 import ProtectedRoute
 from "../components/ProtectedRoute";
 import AdminDashboard
@@ -25,6 +26,8 @@ import ManagePromotions
 from "../pages/ManagePromotions";
 import ManageBookings
 from "../pages/ManageBookings";
+import OccupancyDashboard
+from "../pages/OccupancyDashboard";
 
 
 const AppRoutes = () => {
@@ -57,6 +60,19 @@ const AppRoutes = () => {
       ]}
     >
       <Hotels />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/departures"
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "ADMIN",
+        "RECEPTIONIST",
+      ]}
+    >
+      <DailyDepartures />
     </ProtectedRoute>
   }
 />
@@ -112,6 +128,19 @@ const AppRoutes = () => {
       allowedRoles={["ADMIN"]}
     >
       <ManagePromotions />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/occupancy"
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "ADMIN",
+        "RECEPTIONIST",
+      ]}
+    >
+      <OccupancyDashboard />
     </ProtectedRoute>
   }
 />

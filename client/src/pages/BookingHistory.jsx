@@ -6,8 +6,11 @@ import {
 import {
   getBookingHistory,
 } from "../services/bookingService";
-
+import RebookModal
+from "../components/RebookModal";
 const BookingHistory = () => {
+    const [selectedBooking, setSelectedBooking] =
+  useState(null);
 
   const [bookings, setBookings] =
     useState([]);
@@ -78,12 +81,31 @@ const BookingHistory = () => {
                 {" "}
                 {booking.checkOutDate}
               </p>
+              <button
+  onClick={() =>
+    setSelectedBooking(booking)
+  }
+  className="bg-blue-600 text-white px-4 py-2 rounded mt-4"
+>
+  Quick Rebook
+</button>
 
             </div>
           ))
         }
 
       </div>
+      {
+  selectedBooking && (
+
+    <RebookModal
+      booking={selectedBooking}
+      onClose={() =>
+        setSelectedBooking(null)
+      }
+    />
+  )
+}
 
     </div>
   );

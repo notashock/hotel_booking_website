@@ -8,7 +8,8 @@ import {
   checkInBooking,
   checkOutBooking,
 } from "../services/receptionService";
-
+import ReservationSearch
+from "../components/ReservationSearch";
 const ReceptionPortal = () => {
 
   const [arrivals, setArrivals] =
@@ -86,6 +87,7 @@ const ReceptionPortal = () => {
       <h1 className="text-4xl font-bold mb-6">
         Reception Portal
       </h1>
+      <ReservationSearch />
 
       <div className="space-y-5">
 
