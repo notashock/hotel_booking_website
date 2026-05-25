@@ -70,7 +70,17 @@ const Navbar = () => {
             </Link>
           )
         }
+        {
+  user?.role === "ADMIN" && (
 
+    <Link
+      to="/admin/promotions"
+      className="hover:text-yellow-300"
+    >
+      Promotions
+    </Link>
+  )
+}
         {
           user?.role === "RECEPTIONIST" && (
 

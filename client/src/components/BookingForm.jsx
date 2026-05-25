@@ -3,16 +3,10 @@ import { useState } from "react";
 import { createBooking } from "../services/bookingService";
 
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
-
-import { createBooking }
-from "../services/bookingService";
 
 import { validatePromoCode }
 from "../services/promotionService";
 
-import { useAuth }
-from "../context/AuthContext";
 const BookingForm = ({ roomId, price }) => {
 
   const { user } = useAuth();
@@ -174,3 +168,4 @@ const BookingForm = ({ roomId, price }) => {
     </form>
   );
 };
+export default BookingForm;

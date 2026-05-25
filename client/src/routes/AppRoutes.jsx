@@ -21,6 +21,8 @@ import AdminDashboard
 from "../pages/AdminDashboard";
 import ReceptionPortal
 from "../pages/ReceptionPortal";
+import ManagePromotions
+from "../pages/ManagePromotions";
 
 
 const AppRoutes = () => {
@@ -42,9 +44,19 @@ const AppRoutes = () => {
           path="/login"
           element={<Login />}
         />
-        <Route
+     <Route
   path="/hotels"
-  element={<Hotels />}
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "CUSTOMER",
+        "ADMIN",
+        "RECEPTIONIST",
+      ]}
+    >
+      <Hotels />
+    </ProtectedRoute>
+  }
 />
 <Route
   path="/hotels/:id"
@@ -91,7 +103,16 @@ const AppRoutes = () => {
     </ProtectedRoute>
   }
 />
-       
+     <Route
+  path="/admin/promotions"
+  element={
+    <ProtectedRoute
+      allowedRoles={["ADMIN"]}
+    >
+      <ManagePromotions />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
 
     </BrowserRouter>
