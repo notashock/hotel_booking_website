@@ -1,5 +1,6 @@
 package com.hotel_booking.server.controllers;
 
+import com.hotel_booking.server.dtos.ApiResponse;
 import com.hotel_booking.server.dtos.SearchRequestDto;
 import com.hotel_booking.server.models.entities.Hotel;
 import com.hotel_booking.server.models.entities.Room;
@@ -19,27 +20,46 @@ public class HotelController {
     private HotelService hotelService;
 
     @GetMapping
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        return ResponseEntity.ok(hotelService.getAllHotels());
+    public ResponseEntity<ApiResponse<List<Hotel>>> getAllHotels() {
+        List<Hotel> hotels = hotelService.getAllHotels();
+        return ResponseEntity.ok(ApiResponse.success("Hotels retrieved successfully", hotels));
     }
 
     @PostMapping
-    public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(hotelService.createHotel(hotel));
+    public ResponseEntity<ApiResponse<Hotel>> createHotel(
+            @RequestBody Hotel hotel,
+            @RequestHeader(value = "X-Role", required = false, defaultValue = "CUSTOMER") String role) {
+        validateAdmin(role);
+        Hotel created = hotelService.createHotel(hotel);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(HttpStatus.CREATED.value(), "Hotel created successfully", created));
     }
 
     @PostMapping("/rooms")
-    public ResponseEntity<Room> createRoom(@RequestBody Room room) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(hotelService.createRoom(room));
+    public ResponseEntity<ApiResponse<Room>> createRoom(
+            @RequestBody Room room,
+            @RequestHeader(value = "X-Role", required = false, defaultValue = "CUSTOMER") String role) {
+        validateAdmin(role);
+        Room created = hotelService.createRoom(room);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(HttpStatus.CREATED.value(), "Room created successfully", created));
+    }
+
+    private void validateAdmin(String role) {
+        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
+            throw new com.hotel_booking.server.exceptions.UnauthorizedAccessException("Unauthorized. Only ADMIN accounts can perform this action.");
+        }
     }
 
     @GetMapping("/{hotelId}/rooms")
-    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
-        return ResponseEntity.ok(hotelService.getRoomsByHotelId(hotelId));
+    public ResponseEntity<ApiResponse<List<Room>>> getRoomsByHotelId(@PathVariable Long hotelId) {
+        List<Room> rooms = hotelService.getRoomsByHotelId(hotelId);
+        return ResponseEntity.ok(ApiResponse.success("Rooms retrieved successfully for hotel ID: " + hotelId, rooms));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Room>> searchRooms(SearchRequestDto searchRequest) {
-        return ResponseEntity.ok(hotelService.searchRooms(searchRequest));
+    public ResponseEntity<ApiResponse<List<Room>>> searchRooms(SearchRequestDto searchRequest) {
+        List<Room> rooms = hotelService.searchRooms(searchRequest);
+        return ResponseEntity.ok(ApiResponse.success("Available rooms filtered and retrieved successfully", rooms));
     }
 }

@@ -49,7 +49,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto checkIn(Long bookingId, String role) {
-        validateReceptionistOrAdmin(role);
+        validateReceptionist(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -65,7 +65,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto checkOut(Long bookingId, String role) {
-        validateReceptionistOrAdmin(role);
+        validateReceptionist(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -88,7 +88,9 @@ public class ReceptionService {
     }
 
     @Transactional
-    public BookingResponseDto cancelBooking(Long bookingId) {
+    public BookingResponseDto cancelBooking(Long bookingId, String role) {
+        validateReceptionistOrAdmin(role);
+
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
@@ -111,7 +113,7 @@ public class ReceptionService {
 
     @Transactional
     public BookingResponseDto assignRoomToBooking(Long bookingId, Long newRoomId, String role) {
-        validateReceptionistOrAdmin(role);
+        validateReceptionist(role);
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
@@ -129,9 +131,15 @@ public class ReceptionService {
         return bookingService.mapToResponseDto(saved);
     }
 
+    private void validateReceptionist(String role) {
+        if (role == null || !role.equalsIgnoreCase("RECEPTIONIST")) {
+            throw new UnauthorizedAccessException("Unauthorized. Only RECEPTIONIST accounts can perform this action.");
+        }
+    }
+
     private void validateReceptionistOrAdmin(String role) {
         if (role == null || (!role.equalsIgnoreCase("RECEPTIONIST") && !role.equalsIgnoreCase("ADMIN"))) {
-            throw new UnauthorizedAccessException("Unauthorized. Only RECEPTIONIST or ADMIN can perform this action.");
+            throw new UnauthorizedAccessException("Unauthorized. Only RECEPTIONIST or ADMIN accounts can perform this action.");
         }
     }
 }

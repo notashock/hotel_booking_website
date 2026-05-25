@@ -1,5 +1,6 @@
 package com.hotel_booking.server.controllers;
 
+import com.hotel_booking.server.dtos.ApiResponse;
 import com.hotel_booking.server.dtos.BookingRequestDto;
 import com.hotel_booking.server.dtos.BookingResponseDto;
 import com.hotel_booking.server.services.BookingService;
@@ -20,25 +21,30 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingResponseDto> createBooking(@RequestBody BookingRequestDto request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(request));
+    public ResponseEntity<ApiResponse<BookingResponseDto>> createBooking(@RequestBody BookingRequestDto request) {
+        BookingResponseDto response = bookingService.createBooking(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(HttpStatus.CREATED.value(), "Booking completed successfully", response));
     }
 
     @GetMapping("/history/{userId}")
-    public ResponseEntity<List<BookingResponseDto>> getUserBookingHistory(@PathVariable Long userId) {
-        return ResponseEntity.ok(bookingService.getUserBookingHistory(userId));
+    public ResponseEntity<ApiResponse<List<BookingResponseDto>>> getUserBookingHistory(@PathVariable Long userId) {
+        List<BookingResponseDto> history = bookingService.getUserBookingHistory(userId);
+        return ResponseEntity.ok(ApiResponse.success("User booking history retrieved successfully", history));
     }
 
     @PostMapping("/{bookingId}/rebook")
-    public ResponseEntity<BookingResponseDto> quickRebook(
+    public ResponseEntity<ApiResponse<BookingResponseDto>> quickRebook(
             @PathVariable Long bookingId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
-        return ResponseEntity.ok(bookingService.quickRebook(bookingId, checkInDate, checkOutDate));
+        BookingResponseDto response = bookingService.quickRebook(bookingId, checkInDate, checkOutDate);
+        return ResponseEntity.ok(ApiResponse.success("Quick rebooking completed successfully", response));
     }
 
     @GetMapping("/promotions/validate")
-    public ResponseEntity<Double> validatePromoCode(@RequestParam String code) {
-        return ResponseEntity.ok(bookingService.validatePromoCode(code));
+    public ResponseEntity<ApiResponse<Double>> validatePromoCode(@RequestParam String code) {
+        double discount = bookingService.validatePromoCode(code);
+        return ResponseEntity.ok(ApiResponse.success("Promotion code is valid", discount));
     }
 }

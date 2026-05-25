@@ -1,5 +1,6 @@
 package com.hotel_booking.server.controllers;
 
+import com.hotel_booking.server.dtos.ApiResponse;
 import com.hotel_booking.server.models.entities.User;
 import com.hotel_booking.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,15 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(ApiResponse.success("Users retrieved successfully", users));
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
+    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
+        User created = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(HttpStatus.CREATED.value(), "User registered successfully", created));
     }
 }
