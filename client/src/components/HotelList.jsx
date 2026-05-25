@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { MdLocationOn } from "react-icons/md";
 const HotelList = ({ hotels }) => {
 
   return (
@@ -17,9 +18,10 @@ const HotelList = ({ hotels }) => {
     {hotel.name}
   </h2>
 
-  <p className="mb-2">
-    📍 {hotel.location}
-  </p>
+<p className="flex items-center gap-1 text-gray-600">
+  <MdLocationOn className="text-red-500 text-xl" />
+  {hotel.location}
+</p>
 
   <p className="text-gray-600 mb-4">
     {hotel.facilities}
