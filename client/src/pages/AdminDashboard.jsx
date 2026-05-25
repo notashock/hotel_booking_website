@@ -1,5 +1,7 @@
 import AddHotelForm
 from "../components/AddHotelForm";
+import AddRoomForm
+from "../components/AddRoomForm";
 const AdminDashboard = () => {
 
   return (
@@ -50,6 +52,7 @@ const AdminDashboard = () => {
 
       </div>
       <AddHotelForm />
+      <AddRoomForm />
     </div>
   );
 };

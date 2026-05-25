@@ -25,3 +25,14 @@ export const addHotel = async (
 
   return response.data;
 };
+export const addRoom = async (
+  roomData
+) => {
+
+  const response = await API.post(
+    "/rooms",
+    roomData
+  );
+
+  return response.data;
+};
