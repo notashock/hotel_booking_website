@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getHotelById }from "../services/hotelService";
-import {BookingForm} from "../components/BookingForm";
+import BookingForm from "../components/BookingForm";
 import { MdLocationOn } from "react-icons/md";
 
 

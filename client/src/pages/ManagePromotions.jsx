@@ -1,6 +1,6 @@
 import {useEffect,useState,} from "react";
-import {PromotionForm} from "../components/PromotionForm";
-import {PromotionList} from "../components/PromotionList";
+import PromotionForm from "../components/PromotionForm";
+import PromotionList from "../components/PromotionList";
 import { getAllPromotions} from "../services/promotionService";
 
 const ManagePromotions = () => {
