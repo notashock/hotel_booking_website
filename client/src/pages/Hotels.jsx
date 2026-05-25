@@ -11,7 +11,15 @@ const Hotels = () => {
 
   const [hotels, setHotels] = useState([]);
 
-  const [search, setSearch] = useState("");
+  const [filters, setFilters] =
+  useState({
+    location: "",
+    minPrice: "",
+    maxPrice: "",
+    amenities: "",
+    checkInDate: "",
+    checkOutDate: "",
+  });
 
   useEffect(() => {
 
@@ -33,12 +41,52 @@ const Hotels = () => {
     }
   };
 
-  const filteredHotels = hotels.filter(
-    (hotel) =>
+ const filteredHotels = hotels.filter(
+  (hotel) => {
+
+    const matchesLocation =
       hotel.location
         .toLowerCase()
-        .includes(search.toLowerCase())
-  );
+        .includes(
+          filters.location.toLowerCase()
+        );
+
+    const matchesAmenities =
+      hotel.facilities
+        .toLowerCase()
+        .includes(
+          filters.amenities.toLowerCase()
+        );
+
+    const matchesPrice =
+      hotel.rooms?.some((room) => {
+
+        const price =
+          Number(room.price);
+
+        const min =
+          filters.minPrice
+            ? Number(filters.minPrice)
+            : 0;
+
+        const max =
+          filters.maxPrice
+            ? Number(filters.maxPrice)
+            : Infinity;
+
+        return (
+          price >= min &&
+          price <= max
+        );
+      });
+
+    return (
+      matchesLocation &&
+      matchesAmenities &&
+      matchesPrice
+    );
+  }
+);
 
   return (
 
@@ -49,9 +97,9 @@ const Hotels = () => {
       </h1>
 
       <SearchAndFilter
-        search={search}
-        setSearch={setSearch}
-      />
+  filters={filters}
+  setFilters={setFilters}
+/>
 
       <HotelList hotels={filteredHotels} />
 

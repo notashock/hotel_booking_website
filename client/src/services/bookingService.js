@@ -50,3 +50,13 @@ export const rebookRoom =
 
     return response.data;
 };
+export const updateBooking =
+  async (bookingId, bookingData) => {
+
+    const response = await API.put(
+      `/bookings/${bookingId}`,
+      bookingData
+    );
+
+    return response.data;
+};
