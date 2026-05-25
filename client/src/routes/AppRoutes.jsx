@@ -1,15 +1,12 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 
-import Home from "../pages/Home";
+// ── Public Pages ──
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Hotels from "../pages/Hotels";
+<<<<<<< HEAD
 import HotelDetails
 from "../pages/HotelDetails";
 import BookingHistory
@@ -28,27 +25,51 @@ import ManageBookings
 from "../pages/ManageBookings";
 import OccupancyDashboard
 from "../pages/OccupancyDashboard";
+=======
+import HotelDetails from "../pages/HotelDetails";
 
+// ── Customer Pages ──
+import BookingHistory from "../pages/BookingHistory";
+>>>>>>> ashok
+
+// ── Admin Pages ──
+import AdminDashboard from "../pages/AdminDashboard";
+
+// ── Reception Pages ──
+import ReceptionPortal from "../pages/ReceptionPortal";
 
 const AppRoutes = () => {
-
   return (
-
     <BrowserRouter>
-
       <Navbar />
-
       <Routes>
+        {/* ── Public Routes ── */}
+        <Route path="/" element={<Hotels />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/hotels" element={<Hotels />} />
+        <Route path="/hotels/:id" element={<HotelDetails />} />
 
+        {/* ── Customer Routes (any authenticated user can view their bookings) ── */}
         <Route
-          path="/"
-          element={<Home />}
+          path="/booking-history"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+              <BookingHistory />
+            </ProtectedRoute>
+          }
         />
 
+        {/* ── Admin Dashboard (ADMIN only) ── */}
         <Route
-          path="/login"
-          element={<Login />}
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
         />
+<<<<<<< HEAD
      <Route
   path="/hotels"
   element={
@@ -80,10 +101,19 @@ const AppRoutes = () => {
   path="/hotels/:id"
   element={<HotelDetails />}
 />
+=======
+
+        {/* ── Reception Portal (RECEPTIONIST + ADMIN) ── */}
+>>>>>>> ashok
         <Route
-          path="/register"
-          element={<Register />}
+          path="/reception"
+          element={
+            <ProtectedRoute allowedRoles={["RECEPTIONIST"]}>
+              <ReceptionPortal />
+            </ProtectedRoute>
+          }
         />
+<<<<<<< HEAD
         <Route
   path="/booking-history"
   element={
@@ -157,8 +187,9 @@ const AppRoutes = () => {
     </ProtectedRoute>
   }
 />
+=======
+>>>>>>> ashok
       </Routes>
-
     </BrowserRouter>
   );
 };
