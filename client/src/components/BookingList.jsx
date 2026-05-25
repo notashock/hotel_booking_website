@@ -1,6 +1,7 @@
 const BookingList = ({
   bookings,
-  onCancel
+  onCancel,
+  onAssignRoom,
 }) => {
 
   return (
@@ -63,20 +64,34 @@ const BookingList = ({
               {booking.status}
             </p>
 
-            {
-              booking.status !==
-              "CANCELLED" && (
+           {
+  booking.status !==
+  "CANCELLED" && (
 
-                <button
-                  onClick={() =>
-                    onCancel(booking.id)
-                  }
-                  className="bg-red-600 text-white px-4 py-2 rounded mt-4"
-                >
-                  Cancel Booking
-                </button>
-              )
-            }
+    <div className="flex gap-4 mt-4">
+
+      <button
+        onClick={() =>
+          onCancel(booking.id)
+        }
+        className="bg-red-600 text-white px-4 py-2 rounded"
+      >
+        Cancel Booking
+      </button>
+
+      <button
+        onClick={() =>
+          onAssignRoom(booking)
+        }
+        className="bg-green-600 text-white px-4 py-2 rounded"
+      >
+        Assign Room
+      </button>
+
+    </div>
+
+  )
+}
 
           </div>
         ))

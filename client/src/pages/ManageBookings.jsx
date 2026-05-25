@@ -10,9 +10,11 @@ import {
   getAllBookings,
   cancelBooking,
 } from "../services/bookingService";
-
+import AssignRoomModal
+from "../components/AssignRoomModal";
 const ManageBookings = () => {
-
+   const [selectedBooking, setSelectedBooking] =
+  useState(null);
   const [bookings, setBookings] =
     useState([]);
 
@@ -70,10 +72,25 @@ const ManageBookings = () => {
         Manage Bookings
       </h1>
 
-      <BookingList
-        bookings={bookings}
-        onCancel={handleCancel}
-      />
+     <BookingList
+  bookings={bookings}
+  onCancel={handleCancel}
+  onAssignRoom={setSelectedBooking}
+/>
+{
+  selectedBooking && (
+
+    <AssignRoomModal
+      booking={selectedBooking}
+      onClose={() =>
+        setSelectedBooking(null)
+      }
+      refreshBookings={
+        fetchBookings
+      }
+    />
+  )
+}
 
     </div>
   );

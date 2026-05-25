@@ -40,3 +40,13 @@ export const cancelBooking =
 
     return response.data;
 };
+export const rebookRoom =
+  async (bookingId, bookingData) => {
+
+    const response = await API.post(
+      `/bookings/rebook/${bookingId}`,
+      bookingData
+    );
+
+    return response.data;
+};

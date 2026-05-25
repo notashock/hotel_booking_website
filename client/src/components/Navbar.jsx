@@ -93,6 +93,30 @@ const Navbar = () => {
     </Link>
   )
 }
+{
+  (user?.role === "ADMIN" ||
+   user?.role === "RECEPTIONIST") && (
+
+    <Link
+      to="/occupancy"
+      className="hover:text-yellow-300"
+    >
+      Occupancy
+    </Link>
+  )
+}
+{
+  (user?.role === "ADMIN" ||
+   user?.role === "RECEPTIONIST") && (
+
+    <Link
+      to="/departures"
+      className="hover:text-yellow-300"
+    >
+      Departures
+    </Link>
+  )
+}
         {
           user?.role === "RECEPTIONIST" && (
 
