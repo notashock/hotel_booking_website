@@ -1,17 +1,8 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import {useEffect,useState,} from "react";
+import {BookingList}from "../components/BookingList";
 
-import BookingList
-from "../components/BookingList";
-
-import {
-  getAllBookings,
-  cancelBooking,
-} from "../services/bookingService";
-import AssignRoomModal
-from "../components/AssignRoomModal";
+import {getAllBookings,cancelBooking,} from "../services/bookingService";
+import {AssignRoomModal} from "../components/AssignRoomModal";
 const ManageBookings = () => {
    const [selectedBooking, setSelectedBooking] =
   useState(null);

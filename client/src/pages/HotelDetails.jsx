@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-
 import { useParams } from "react-router-dom";
+import { getHotelById }from "../services/hotelService";
+import {BookingForm} from "../components/BookingForm";
+import { MdLocationOn } from "react-icons/md";
 
-import { getHotelById }
-from "../services/hotelService";
-import BookingForm
-from "../components/BookingForm";
 
 const HotelDetails = () => {
 
@@ -51,9 +49,10 @@ const HotelDetails = () => {
         {hotel.name}
       </h1>
 
-      <p className="text-xl mb-3">
-        📍 {hotel.location}
-      </p>
+     <p className="mb-2 flex items-center gap-1">
+  <MdLocationOn className="text-red-500 text-lg" />
+  {hotel.location}
+</p>
 
       <p className="mb-8">
         {hotel.facilities}

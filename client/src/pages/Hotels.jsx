@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
-
 import HotelList from "../components/HotelList";
-
 import SearchAndFilter from "../components/SearchAndFilter";
-
-import { getAllHotels }
-from "../services/hotelService";
+import { getAllHotels } from "../services/hotelService";
 
 const Hotels = () => {
-
   const [hotels, setHotels] = useState([]);
-
   const [filters, setFilters] =
   useState({
     location: "",
@@ -22,7 +16,6 @@ const Hotels = () => {
   });
 
   useEffect(() => {
-
     fetchHotels();
 
   }, []);
@@ -30,11 +23,8 @@ const Hotels = () => {
   const fetchHotels = async () => {
 
     try {
-
       const data = await getAllHotels();
-
       setHotels(data);
-
     } catch (error) {
 
       console.log(error);

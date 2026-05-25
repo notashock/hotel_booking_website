@@ -1,15 +1,7 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  getDailyDepartures,
-  checkOutBooking,
-} from "../services/receptionService";
+import {useEffect,useState,} from "react";
+import {getDailyDepartures,checkOutBooking} from "../services/receptionService";
 
 const DailyDepartures = () => {
-
   const [departures, setDepartures] =
     useState([]);
 
@@ -43,9 +35,7 @@ const DailyDepartures = () => {
           bookingId
         );
 
-        alert(
-          "Customer Checked-Out"
-        );
+        alert("Customer Checked-Out");
 
         fetchDepartures();
 
@@ -53,9 +43,7 @@ const DailyDepartures = () => {
 
         console.log(error);
 
-        alert(
-          "Check-Out Failed"
-        );
+        alert("Check-Out Failed");
       }
     };
 

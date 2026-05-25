@@ -1,17 +1,11 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import API from "../services/api";
-
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-
   const navigate = useNavigate();
-
   const { login } = useAuth();
-
   const [formData, setFormData] = useState({
     email:"",
     password:"",
@@ -26,9 +20,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     try{
 
       const response = await API.post(
