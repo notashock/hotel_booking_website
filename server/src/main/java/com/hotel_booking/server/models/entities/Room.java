@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "rooms")
 @Data
@@ -30,6 +34,14 @@ public class Room {
     @Column(length = 1000)
     private String amenities; // comma-separated amenities e.g., "AC, TV, King Bed"
 
+    @com.fasterxml.jackson.annotation.JsonProperty("isAvailable")
     @Column(nullable = false)
     private boolean isAvailable;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

@@ -1,164 +1,65 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 
+// ── Public Pages ──
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Hotels from "../pages/Hotels";
-import HotelDetails
-from "../pages/HotelDetails";
-import BookingHistory
-from "../pages/BookingHistory";
-import DailyDepartures
-from "../pages/DailyDepartures";
-import ProtectedRoute
-from "../components/ProtectedRoute";
-import AdminDashboard
-from "../pages/AdminDashboard";
-import ReceptionPortal
-from "../pages/ReceptionPortal";
-import ManagePromotions
-from "../pages/ManagePromotions";
-import ManageBookings
-from "../pages/ManageBookings";
-import OccupancyDashboard
-from "../pages/OccupancyDashboard";
+import HotelDetails from "../pages/HotelDetails";
 
+// ── Customer Pages ──
+import BookingHistory from "../pages/BookingHistory";
+
+// ── Admin Pages ──
+import AdminDashboard from "../pages/AdminDashboard";
+
+// ── Reception Pages ──
+import ReceptionPortal from "../pages/ReceptionPortal";
 
 const AppRoutes = () => {
-
   return (
-
     <BrowserRouter>
-
       <Navbar />
-
       <Routes>
+        {/* ── Public Routes ── */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/hotels" element={<Hotels />} />
+        <Route path="/hotels/:id" element={<HotelDetails />} />
 
+        {/* ── Customer Routes (any authenticated user can view their bookings) ── */}
         <Route
-          path="/"
-          element={<Home />}
+          path="/booking-history"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER", "ADMIN", "RECEPTIONIST"]}>
+              <BookingHistory />
+            </ProtectedRoute>
+          }
         />
 
+        {/* ── Admin Dashboard (ADMIN only) ── */}
         <Route
-          path="/login"
-          element={<Login />}
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
         />
-     <Route
-  path="/hotels"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "CUSTOMER",
-        "ADMIN",
-        "RECEPTIONIST",
-      ]}
-    >
-      <Hotels />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/departures"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "ADMIN",
-        "RECEPTIONIST",
-      ]}
-    >
-      <DailyDepartures />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/hotels/:id"
-  element={<HotelDetails />}
-/>
+
+        {/* ── Reception Portal (RECEPTIONIST + ADMIN) ── */}
         <Route
-          path="/register"
-          element={<Register />}
+          path="/reception"
+          element={
+            <ProtectedRoute allowedRoles={["RECEPTIONIST", "ADMIN"]}>
+              <ReceptionPortal />
+            </ProtectedRoute>
+          }
         />
-        <Route
-  path="/booking-history"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "CUSTOMER",
-        "ADMIN",
-        "RECEPTIONIST",
-      ]}
-    >
-      <BookingHistory />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/admin"
-  element={
-    <ProtectedRoute
-      allowedRoles={["ADMIN"]}
-    >
-      <AdminDashboard />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/reception"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "RECEPTIONIST",
-        "ADMIN",
-      ]}
-    >
-      <ReceptionPortal />
-    </ProtectedRoute>
-  }
-/>
-     <Route
-  path="/admin/promotions"
-  element={
-    <ProtectedRoute
-      allowedRoles={["ADMIN"]}
-    >
-      <ManagePromotions />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/occupancy"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "ADMIN",
-        "RECEPTIONIST",
-      ]}
-    >
-      <OccupancyDashboard />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/manage-bookings"
-  element={
-    <ProtectedRoute
-      allowedRoles={[
-        "ADMIN",
-        "RECEPTIONIST",
-      ]}
-    >
-      <ManageBookings />
-    </ProtectedRoute>
-  }
-/>
       </Routes>
-
     </BrowserRouter>
   );
 };

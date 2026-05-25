@@ -1,6 +1,5 @@
 package com.hotel_booking.server.security;
 
-import com.hotel_booking.server.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -23,24 +27,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // 1. Enable CORS using the custom bean defined below
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // 2. Disable CSRF (safe since we are using JWT)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Allow public access to Auth endpoints (Login/Register)
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // Allow public access to Swagger UI and API Docs
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-
-                        // Role-based access control based on Problem Statement V2
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/reception/**").hasAnyAuthority("RECEPTIONIST", "ADMIN")
-                        .requestMatchers("/api/customer/**").hasAuthority("CUSTOMER")
-
-                        // All other requests require authentication
+                        // Customer endpoints (hotels, bookings, promos) are accessible to ALL authenticated users
+                        .requestMatchers("/api/customer/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -50,5 +51,26 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // Global CORS Configuration
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Define allowed origins (Update this with your frontend URL in production)
+        configuration.setAllowedOrigins(List.of("*"));
+
+        // Define allowed HTTP methods
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        // Define allowed Headers (Authorization is critical for JWT)
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+
+        // Apply this configuration to all paths
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }

@@ -6,6 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "hotels")
 @Data
@@ -24,6 +30,14 @@ public class Hotel {
     @Column(nullable = false)
     private String location;
 
+    @Convert(converter = com.hotel_booking.server.utils.StringListConverter.class)
     @Column(length = 1000)
-    private String facilities; // comma-separated facilities e.g., "WiFi, Pool, Spa"
+    private List<String> facilities; // comma-separated facilities e.g., "WiFi, Pool, Spa"
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

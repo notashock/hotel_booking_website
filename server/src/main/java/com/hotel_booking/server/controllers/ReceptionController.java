@@ -3,20 +3,29 @@ package com.hotel_booking.server.controllers;
 import com.hotel_booking.server.dtos.ApiResponse;
 import com.hotel_booking.server.dtos.BookingResponseDto;
 import com.hotel_booking.server.services.ReceptionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reception")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/reception") // Secured by /api/reception/** in SecurityConfig
+// @CrossOrigin removed - handled globally by SecurityConfig
+@RequiredArgsConstructor
 public class ReceptionController {
 
-    @Autowired
-    private ReceptionService receptionService;
+    private final ReceptionService receptionService;
+
+    // Helper method to extract the cryptographically verified role from the JWT
+    // This allows us to pass the role to the service layer without relying on fakeable headers.
+    private String getAuthenticatedRole() {
+        return SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().iterator().next().getAuthority();
+    }
 
     @GetMapping("/arrivals")
     public ResponseEntity<ApiResponse<List<BookingResponseDto>>> getDailyArrivals(
@@ -40,36 +49,30 @@ public class ReceptionController {
         return ResponseEntity.ok(ApiResponse.success("Current room occupancy retrieved successfully", occupancy));
     }
 
-    @PostMapping("/{bookingId}/check-in")
-    public ResponseEntity<ApiResponse<BookingResponseDto>> checkIn(
-            @PathVariable Long bookingId,
-            @RequestHeader(value = "X-Role", required = false, defaultValue = "RECEPTIONIST") String role) {
-        BookingResponseDto response = receptionService.checkIn(bookingId, role);
+    @PutMapping("/{bookingId}/check-in")
+    public ResponseEntity<ApiResponse<BookingResponseDto>> checkIn(@PathVariable Long bookingId) {
+        // Pass the secure role from the JWT directly to the service
+        BookingResponseDto response = receptionService.checkIn(bookingId, getAuthenticatedRole());
         return ResponseEntity.ok(ApiResponse.success("Customer check-in completed successfully", response));
     }
 
-    @PostMapping("/{bookingId}/check-out")
-    public ResponseEntity<ApiResponse<BookingResponseDto>> checkOut(
-            @PathVariable Long bookingId,
-            @RequestHeader(value = "X-Role", required = false, defaultValue = "RECEPTIONIST") String role) {
-        BookingResponseDto response = receptionService.checkOut(bookingId, role);
+    @PutMapping("/{bookingId}/check-out")
+    public ResponseEntity<ApiResponse<BookingResponseDto>> checkOut(@PathVariable Long bookingId) {
+        BookingResponseDto response = receptionService.checkOut(bookingId, getAuthenticatedRole());
         return ResponseEntity.ok(ApiResponse.success("Customer check-out completed successfully", response));
     }
 
-    @PostMapping("/{bookingId}/cancel")
-    public ResponseEntity<ApiResponse<BookingResponseDto>> cancelBooking(
-            @PathVariable Long bookingId,
-            @RequestHeader(value = "X-Role", required = false, defaultValue = "RECEPTIONIST") String role) {
-        BookingResponseDto response = receptionService.cancelBooking(bookingId, role);
+    @PutMapping("/{bookingId}/cancel")
+    public ResponseEntity<ApiResponse<BookingResponseDto>> cancelBooking(@PathVariable Long bookingId) {
+        BookingResponseDto response = receptionService.cancelBooking(bookingId, getAuthenticatedRole());
         return ResponseEntity.ok(ApiResponse.success("Booking cancelled successfully", response));
     }
 
-    @PostMapping("/{bookingId}/assign-room")
+    @PutMapping("/{bookingId}/assign-room")
     public ResponseEntity<ApiResponse<BookingResponseDto>> assignRoomToBooking(
             @PathVariable Long bookingId,
-            @RequestParam Long newRoomId,
-            @RequestHeader(value = "X-Role", required = false, defaultValue = "RECEPTIONIST") String role) {
-        BookingResponseDto response = receptionService.assignRoomToBooking(bookingId, newRoomId, role);
+            @RequestParam Long newRoomId) {
+        BookingResponseDto response = receptionService.assignRoomToBooking(bookingId, newRoomId, getAuthenticatedRole());
         return ResponseEntity.ok(ApiResponse.success("Physical room assigned to booking successfully", response));
     }
 }
