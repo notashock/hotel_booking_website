@@ -19,7 +19,8 @@ import ProtectedRoute
 from "../components/ProtectedRoute";
 import AdminDashboard
 from "../pages/AdminDashboard";
-
+import ReceptionPortal
+from "../pages/ReceptionPortal";
 
 
 const AppRoutes = () => {
@@ -74,6 +75,19 @@ const AppRoutes = () => {
       allowedRoles={["ADMIN"]}
     >
       <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/reception"
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "RECEPTIONIST",
+        "ADMIN",
+      ]}
+    >
+      <ReceptionPortal />
     </ProtectedRoute>
   }
 />
