@@ -23,6 +23,8 @@ import ReceptionPortal
 from "../pages/ReceptionPortal";
 import ManagePromotions
 from "../pages/ManagePromotions";
+import ManageBookings
+from "../pages/ManageBookings";
 
 
 const AppRoutes = () => {
@@ -110,6 +112,19 @@ const AppRoutes = () => {
       allowedRoles={["ADMIN"]}
     >
       <ManagePromotions />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/manage-bookings"
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "ADMIN",
+        "RECEPTIONIST",
+      ]}
+    >
+      <ManageBookings />
     </ProtectedRoute>
   }
 />

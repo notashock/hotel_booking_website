@@ -81,6 +81,18 @@ const Navbar = () => {
     </Link>
   )
 }
+{
+  (user?.role === "ADMIN" ||
+   user?.role === "RECEPTIONIST") && (
+
+    <Link
+      to="/manage-bookings"
+      className="hover:text-yellow-300"
+    >
+      Manage Bookings
+    </Link>
+  )
+}
         {
           user?.role === "RECEPTIONIST" && (
 

@@ -21,3 +21,22 @@ export const getBookingHistory =
 
     return response.data;
 };
+export const getAllBookings =
+  async () => {
+
+    const response = await API.get(
+      "/bookings"
+    );
+
+    return response.data;
+};
+
+export const cancelBooking =
+  async (bookingId) => {
+
+    const response = await API.put(
+      `/bookings/cancel/${bookingId}`
+    );
+
+    return response.data;
+};
