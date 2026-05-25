@@ -117,8 +117,8 @@ public class BookingService {
         Booking savedBooking = bookingRepository.save(booking);
 
         // Instantly update room's availability
-        // room.setAvailable(false); // Make it generally unavailable if booked
-        // roomRepository.save(room);
+        room.setAvailable(false); // Make it generally unavailable if booked
+        roomRepository.save(room);
 
         // 8. Lookup Hotel
         Hotel hotel = hotelRepository.findById(room.getHotelId())
