@@ -19,8 +19,6 @@ const Navbar = () => {
 
     <div className="bg-blue-600 text-white px-8 py-4 flex justify-between items-center shadow-md">
 
-      {/* Logo */}
-
       <Link to="/">
 
         <h1 className="text-3xl font-bold cursor-pointer">
@@ -28,8 +26,6 @@ const Navbar = () => {
         </h1>
 
       </Link>
-
-      {/* Navigation Links */}
 
       <div className="flex items-center gap-6 text-lg">
 

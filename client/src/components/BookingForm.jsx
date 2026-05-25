@@ -1,16 +1,11 @@
 import { useState } from "react";
-
 import { createBooking } from "../services/bookingService";
-
 import { useAuth } from "../context/AuthContext";
-
 import { validatePromoCode }
 from "../services/promotionService";
 
 const BookingForm = ({ roomId, price }) => {
-
   const { user } = useAuth();
-
   const [formData, setFormData] = useState({
     checkInDate: "",
     checkOutDate: "",
@@ -31,9 +26,7 @@ const BookingForm = ({ roomId, price }) => {
   };
 
   const applyPromoCode = async () => {
-
     try {
-
       const response =
         await validatePromoCode(
           promoCode
@@ -45,17 +38,14 @@ const BookingForm = ({ roomId, price }) => {
 
       alert("Promo Code Applied");
 
-    } catch (error) {
-
+    }catch (error){
       console.log(error);
 
       alert("Invalid Promo Code");
     }
   };
 
-  const totalPrice =
-    price - discount;
-
+  const totalPrice =price - discount;
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -74,9 +64,7 @@ const BookingForm = ({ roomId, price }) => {
           bookingData
         );
 
-      alert(
-        `Booking Confirmed\nReservation Number: ${response.reservationNumber}`
-      );
+      alert( `Booking Confirmed\nReservation Number: ${response.reservationNumber}`);
 
     } catch (error) {
 

@@ -7,7 +7,6 @@ const BookingList = ({
   return (
 
     <div className="space-y-5">
-
       {
         bookings.map((booking) => (
 

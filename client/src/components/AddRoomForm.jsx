@@ -1,10 +1,8 @@
 import { useState } from "react";
-
 import { addRoom }
 from "../services/hotelService";
 
 const AddRoomForm = () => {
-
   const [formData, setFormData] = useState({
     hotelId: "",
     roomCategory: "",
@@ -14,9 +12,7 @@ const AddRoomForm = () => {
   });
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
       [name]: value,
@@ -24,13 +20,9 @@ const AddRoomForm = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     try {
-
       await addRoom(formData);
-
       alert("Room Added Successfully");
 
       setFormData({
@@ -42,9 +34,7 @@ const AddRoomForm = () => {
       });
 
     } catch (error) {
-
       console.log(error);
-
       alert("Failed To Add Room");
     }
   };

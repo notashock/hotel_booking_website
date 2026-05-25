@@ -1,8 +1,5 @@
 import { useState } from "react";
-
-import {
-  searchReservation,
-} from "../services/receptionService";
+import {searchReservation} from "../services/receptionService";
 
 const ReservationSearch = () => {
 
@@ -17,21 +14,14 @@ const ReservationSearch = () => {
     async () => {
 
       try {
-
-        const data =
-          await searchReservation(
-            reservationNumber
-          );
-
+        const data =await searchReservation(reservationNumber);
         setBooking(data);
 
       } catch (error) {
 
         console.log(error);
 
-        alert(
-          "Reservation Not Found"
-        );
+        alert("Reservation Not Found");
       }
     };
 

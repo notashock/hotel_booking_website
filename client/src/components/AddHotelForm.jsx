@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { addHotel }
 from "../services/hotelService";
 
@@ -20,13 +19,9 @@ const AddHotelForm = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     try {
-
       await addHotel(formData);
-
       alert("Hotel Added Successfully");
 
       setFormData({
@@ -44,7 +39,6 @@ const AddHotelForm = () => {
   };
 
   return (
-
     <form
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded-xl shadow-lg mt-8"

@@ -18,10 +18,10 @@ const HotelList = ({ hotels }) => {
     {hotel.name}
   </h2>
 
-<p className="flex items-center gap-1 text-gray-600">
-  <MdLocationOn className="text-red-500 text-xl" />
-  {hotel.location}
-</p>
+  <p className="flex items-center gap-1 text-gray-600">
+     <MdLocationOn className="text-red-500 text-xl" />
+     {hotel.location}
+  </p>
 
   <p className="text-gray-600 mb-4">
     {hotel.facilities}

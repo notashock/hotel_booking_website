@@ -15,9 +15,7 @@ const AssignRoomModal = ({
 
   const handleAssignRoom =
     async () => {
-
       try {
-
         await assignRoom(
           booking.id,
           roomNumber
@@ -28,13 +26,10 @@ const AssignRoomModal = ({
         );
 
         refreshBookings();
-
         onClose();
 
       } catch (error) {
-
         console.log(error);
-
         alert(
           "Failed To Assign Room"
         );
@@ -44,9 +39,7 @@ const AssignRoomModal = ({
   return (
 
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-
       <div className="bg-white p-8 rounded-xl w-[400px]">
-
         <h2 className="text-3xl font-bold mb-5">
           Assign Physical Room
         </h2>
@@ -82,11 +75,8 @@ const AssignRoomModal = ({
           >
             Cancel
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };
