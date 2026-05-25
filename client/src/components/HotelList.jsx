@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const HotelList = ({ hotels }) => {
 
   return (
@@ -8,23 +9,30 @@ const HotelList = ({ hotels }) => {
         hotels.map((hotel) => (
 
           <div
-            key={hotel.id}
-            className="bg-white rounded-xl shadow-lg p-5"
-          >
+  key={hotel.id}
+  className="bg-white rounded-xl shadow-lg p-5"
+>
 
-            <h2 className="text-2xl font-bold mb-3">
-              {hotel.name}
-            </h2>
+  <h2 className="text-2xl font-bold mb-3">
+    {hotel.name}
+  </h2>
 
-            <p className="mb-2">
-              📍 {hotel.location}
-            </p>
+  <p className="mb-2">
+    📍 {hotel.location}
+  </p>
 
-            <p className="text-gray-600">
-              {hotel.facilities}
-            </p>
+  <p className="text-gray-600 mb-4">
+    {hotel.facilities}
+  </p>
 
-          </div>
+  <Link
+    to={`/hotels/${hotel.id}`}
+    className="bg-blue-600 text-white px-4 py-2 rounded"
+  >
+    View Details
+  </Link>
+
+</div>
         ))
       }
 

@@ -6,3 +6,11 @@ export const getAllHotels = async () => {
 
   return response.data;
 };
+export const getHotelById = async (id) => {
+
+  const response = await API.get(
+    `/hotels/${id}`
+  );
+
+  return response.data;
+};
