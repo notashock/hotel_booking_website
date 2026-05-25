@@ -12,6 +12,11 @@ import Register from "../pages/Register";
 import Hotels from "../pages/Hotels";
 import HotelDetails
 from "../pages/HotelDetails";
+import BookingHistory
+from "../pages/BookingHistory";
+
+import ProtectedRoute
+from "../components/ProtectedRoute";
 
 const AppRoutes = () => {
 
@@ -44,7 +49,21 @@ const AppRoutes = () => {
           path="/register"
           element={<Register />}
         />
-
+        <Route
+  path="/booking-history"
+  element={
+    <ProtectedRoute
+      allowedRoles={[
+        "CUSTOMER",
+        "ADMIN",
+        "RECEPTIONIST",
+      ]}
+    >
+      <BookingHistory />
+    </ProtectedRoute>
+  }
+/>
+       
       </Routes>
 
     </BrowserRouter>

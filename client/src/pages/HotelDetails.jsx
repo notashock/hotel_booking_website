@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 
 import { getHotelById }
 from "../services/hotelService";
+import BookingForm
+from "../components/BookingForm";
 
 const HotelDetails = () => {
 
@@ -83,11 +85,7 @@ const HotelDetails = () => {
                 {room.amenities}
               </p>
 
-              <button
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Book Room
-              </button>
+               <BookingForm roomId={room.id} />
 
             </div>
           ))
