@@ -38,21 +38,31 @@ const Navbar = () => {
           )
         }
 
-        {
-          user ? (
-            <button
-              onClick={logout}
-              className="bg-red-500 px-4 py-2 rounded"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link to="/login">
-              Login
-            </Link>
-          )
-        }
+       {
+  user ? (
 
+    <button
+      onClick={logout}
+      className="bg-red-500 px-4 py-2 rounded"
+    >
+      Logout
+    </button>
+
+  ) : (
+
+    <div className="flex gap-4">
+
+      <Link to="/login">
+        Login
+      </Link>
+
+      <Link to="/register">
+        Register
+      </Link>
+
+    </div>
+  )
+}
       </div>
 
     </div>

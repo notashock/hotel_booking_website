@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const AppRoutes = () => {
 
@@ -27,6 +28,11 @@ const AppRoutes = () => {
         <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
         />
 
       </Routes>
