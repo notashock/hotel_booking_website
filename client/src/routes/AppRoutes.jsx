@@ -17,6 +17,10 @@ from "../pages/BookingHistory";
 
 import ProtectedRoute
 from "../components/ProtectedRoute";
+import AdminDashboard
+from "../pages/AdminDashboard";
+
+
 
 const AppRoutes = () => {
 
@@ -60,6 +64,16 @@ const AppRoutes = () => {
       ]}
     >
       <BookingHistory />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute
+      allowedRoles={["ADMIN"]}
+    >
+      <AdminDashboard />
     </ProtectedRoute>
   }
 />

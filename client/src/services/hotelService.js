@@ -14,3 +14,14 @@ export const getHotelById = async (id) => {
 
   return response.data;
 };
+export const addHotel = async (
+  hotelData
+) => {
+
+  const response = await API.post(
+    "/hotels",
+    hotelData
+  );
+
+  return response.data;
+};
